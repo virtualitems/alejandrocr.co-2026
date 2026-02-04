@@ -12,6 +12,6 @@ if (rootElement === null) {
 
 createRoot(rootElement).render(
   <StrictMode>
-    <Layout />
+    <Layout pageTitle='My Portfolio' columnTitle='About Me' columnNode={<p>This is the about me section.</p>} />
   </StrictMode>
 )

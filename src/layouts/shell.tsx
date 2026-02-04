@@ -8,7 +8,6 @@ import {
   MenuItem,
   MenuItems
 } from '@headlessui/react'
-import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 
 const user = {
@@ -19,11 +18,11 @@ const user = {
 }
 
 const navigation = [
-  { name: 'Dashboard', href: '#', current: true },
-  { name: 'Team', href: '#', current: false },
-  { name: 'Projects', href: '#', current: false },
-  { name: 'Calendar', href: '#', current: false },
-  { name: 'Reports', href: '#', current: false }
+  { name: 'About', href: '#', current: true },
+  { name: 'Persons', href: '#', current: false },
+  { name: 'Inspector', href: '#', current: false },
+  { name: 'Reports', href: '#', current: false },
+  { name: 'Contact', href: '#', current: false }
 ]
 
 const userNavigation = [
@@ -36,12 +35,13 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-type AppProps = {
+type Props = {
   title?: string
   children: ReactNode
 }
 
-export function AppShell({ title = 'Dashboard', children }: AppProps) {
+export function AppShell(props: Props) {
+  const { title, children } = props
   return (
     <div className="h-full grid grid-rows-[auto_1fr_auto]">
       <div className="bg-indigo-600 pb-32 dark:bg-indigo-800">
@@ -79,20 +79,7 @@ export function AppShell({ title = 'Dashboard', children }: AppProps) {
                   </div>
                 </div>
               </div>
-              <div className="flex flex-1 justify-center px-2 lg:ml-6 lg:justify-end">
-                <div className="grid w-full max-w-lg grid-cols-1 lg:max-w-xs">
-                  <input
-                    name="search"
-                    placeholder="Search"
-                    aria-label="Search"
-                    className="col-start-1 row-start-1 block w-full rounded-md bg-indigo-500/75 py-1.5 pr-3 pl-10 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-white/75 focus:outline-2 focus:-outline-offset-2 focus:outline-white sm:text-sm/6 dark:bg-indigo-700/50 dark:outline-indigo-400/25 dark:placeholder:text-white/50"
-                  />
-                  <MagnifyingGlassIcon
-                    aria-hidden="true"
-                    className="pointer-events-none col-start-1 row-start-1 ml-3 size-5 self-center text-white/75 dark:text-white/50"
-                  />
-                </div>
-              </div>
+              <div className="flex flex-1 justify-end px-2 lg:ml-6" />
               <div className="flex lg:hidden">
                 <DisclosureButton className="group relative inline-flex items-center justify-center rounded-md bg-indigo-600 p-2 text-indigo-200 hover:bg-indigo-500/75 hover:text-white focus:outline-2 focus:outline-offset-2 focus:outline-white dark:bg-indigo-800 dark:hover:bg-indigo-700/75">
                   <span className="absolute -inset-0.5" />
