@@ -1,6 +1,6 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import { App } from './layouts/1-column'
+import { Layout } from './layouts/1-column'
 
 import './tailwind.css'
 
@@ -12,6 +12,6 @@ if (rootElement === null) {
 
 createRoot(rootElement).render(
   <StrictMode>
-    <App />
+    <Layout />
   </StrictMode>
 )
