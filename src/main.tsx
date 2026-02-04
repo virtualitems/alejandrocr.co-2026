@@ -1,6 +1,8 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import './index.css'
+import { App } from './layouts/app'
+
+import './tailwind.css'
 
 const rootElement = document.getElementById('root')
 
@@ -8,4 +10,8 @@ if (rootElement === null) {
   throw new Error('Root element not found')
 }
 
-createRoot(rootElement).render(<StrictMode></StrictMode>)
+createRoot(rootElement).render(
+  <StrictMode>
+    <App />
+  </StrictMode>
+)
