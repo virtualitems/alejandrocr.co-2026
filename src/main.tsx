@@ -2,6 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { Layout } from './layouts/2-columns'
 import { ReportsTable, type Person } from './components/reports-table'
+import { Chat, type Message } from './components/chat'
 
 import './tailwind.css'
 
@@ -59,6 +60,32 @@ const userNavigation = [
   { name: 'Sign out', href: '#' }
 ]
 
+const bot = {
+  name: 'AI Assistant',
+  imageUrl: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
+}
+
+const initialMessages: Message[] = [
+  {
+    id: '1',
+    text: 'Hello! How can I help you today?',
+    sender: 'bot',
+    timestamp: new Date('2024-12-06T10:00:00Z')
+  },
+  {
+    id: '2',
+    text: 'Hi! I have a question about your portfolio.',
+    sender: 'user',
+    timestamp: new Date('2024-12-06T10:01:00Z')
+  },
+  {
+    id: '3',
+    text: 'Sure! I\'d be happy to help. What would you like to know?',
+    sender: 'bot',
+    timestamp: new Date('2024-12-06T10:01:30Z')
+  }
+]
+
 const rootElement = document.getElementById('root')
 
 if (rootElement === null) {
@@ -72,7 +99,16 @@ createRoot(rootElement).render(
       leftColumnTitle="Table"
       leftColumnNode={<ReportsTable people={people} />}
       rightColumnTitle="Chat"
-      rightColumnNode={<p>chat.</p>}
+      rightColumnNode={
+        <Chat
+          user={user}
+          bot={bot}
+          initialMessages={initialMessages}
+          onSendMessage={(message) => {
+            console.log('Message sent:', message)
+          }}
+        />
+      }
       navigation={navigation}
       user={user}
       userNavigation={userNavigation}

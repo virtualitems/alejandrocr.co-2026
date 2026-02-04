@@ -1,0 +1,141 @@
+import { useState, useRef, useEffect } from 'react'
+import { Avatar } from './catalyst-ui-kit/avatar'
+import { Button } from './catalyst-ui-kit/button'
+import { Input } from './catalyst-ui-kit/input'
+
+export type Message = {
+  id: string
+  text: string
+  sender: 'user' | 'bot'
+  timestamp: Date
+}
+
+type Props = {
+  user: {
+    name: string
+    imageUrl: string
+  }
+  bot: {
+    name: string
+    imageUrl: string
+  }
+  initialMessages?: Message[]
+  onSendMessage?: (message: string) => void
+}
+
+export function Chat(props: Props) {
+  const { user, bot, initialMessages = [], onSendMessage } = props
+  const [messages, setMessages] = useState<Message[]>(initialMessages)
+  const [inputValue, setInputValue] = useState('')
+  const messagesEndRef = useRef<HTMLDivElement>(null)
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }
+
+  useEffect(() => {
+    scrollToBottom()
+  }, [messages])
+
+  const handleSend = () => {
+    if (inputValue.trim() === '') return
+
+    const newMessage: Message = {
+      id: Date.now().toString(),
+      text: inputValue,
+      sender: 'user',
+      timestamp: new Date()
+    }
+
+    setMessages((prev) => [...prev, newMessage])
+    setInputValue('')
+
+    if (onSendMessage) {
+      onSendMessage(inputValue)
+    }
+
+    // Simulate bot response
+    setTimeout(() => {
+      const botResponse: Message = {
+        id: (Date.now() + 1).toString(),
+        text: 'Thanks for your message! This is an automated response.',
+        sender: 'bot',
+        timestamp: new Date()
+      }
+      setMessages((prev) => [...prev, botResponse])
+    }, 1000)
+  }
+
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleSend()
+    }
+  }
+
+  return (
+    <div className="flex h-full flex-col">
+      {/* Chat Header */}
+      <div className="flex items-center gap-3 border-b border-gray-200 pb-4 dark:border-gray-700">
+        <Avatar src={bot.imageUrl} className="size-10" />
+        <div>
+          <h3 className="text-sm font-semibold text-gray-900 dark:text-white">
+            {bot.name}
+          </h3>
+          <p className="text-xs text-gray-500 dark:text-gray-400">
+            Online
+          </p>
+        </div>
+      </div>
+
+      {/* Messages Container */}
+      <div className="flex-1 overflow-y-auto py-4 space-y-4">
+        {messages.length === 0 && (
+          <div className="flex h-full items-center justify-center">
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              No messages yet. Start a conversation!
+            </p>
+          </div>
+        )}
+
+        {messages.map((message) => (
+          <div
+            key={message.id}
+            className={`flex gap-3 ${
+              message.sender === 'user' ? 'flex-row-reverse' : 'flex-row'
+            }`}
+          >
+            <Avatar
+              src={message.sender === 'user' ? user.imageUrl : bot.imageUrl}
+              className="size-8"
+            />
+            <div
+              className={`rounded-lg px-4 py-2 max-w-xs ${
+                message.sender === 'user'
+                  ? 'bg-indigo-600 text-white dark:bg-indigo-700'
+                  : 'bg-gray-100 text-gray-900 dark:bg-gray-700 dark:text-white'
+              }`}
+            >
+              <p className="text-sm">{message.text}</p>
+            </div>
+          </div>
+        ))}
+        <div ref={messagesEndRef} />
+      </div>
+
+      {/* Input Area */}
+      <div className="flex gap-2 border-t border-gray-200 pt-4 dark:border-gray-700">
+        <Input
+          type="text"
+          placeholder="Type a message..."
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+          onKeyPress={handleKeyPress}
+          className="flex-1"
+        />
+        <Button onClick={handleSend} color="indigo">
+          Send
+        </Button>
+      </div>
+    </div>
+  )
+}
