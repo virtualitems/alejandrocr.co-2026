@@ -43,7 +43,7 @@ export function AppShell(props: Props) {
   const { title, navigation, user, userNavigation, children } = props
   return (
     <div className="h-full grid grid-rows-[auto_1fr_auto]">
-      <div className="bg-indigo-600 pb-32 dark:bg-indigo-800">
+      <div className="bg-indigo-600 pb-42 dark:bg-indigo-800">
         <Disclosure
           as="nav"
           className="border-b border-indigo-300/25 bg-indigo-600 lg:border-none dark:border-indigo-400/25 dark:bg-indigo-800"
@@ -196,13 +196,15 @@ export function AppShell(props: Props) {
             </div>
           </DisclosurePanel>
         </Disclosure>
-        <header className="py-10">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <h1 className="text-3xl font-bold tracking-tight text-white">
-              {title}
-            </h1>
-          </div>
-        </header>
+        {title ? (
+          <header className="py-10">
+            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+              <h1 className="text-3xl font-bold tracking-tight text-white">
+                {title}
+              </h1>
+            </div>
+          </header>
+        ) : null}
       </div>
 
       <main className="h-full -mt-32">{children}</main>

@@ -85,7 +85,6 @@ const initialMessages: Message[] = [
 export function ReportsPage() {
 	return (
 		<Layout
-			pageTitle="My Portfolio"
 			leftColumnTitle="Table"
 			leftColumnNode={<ReportsTable people={people} />}
 			rightColumnTitle="Chat"
