@@ -1,6 +1,6 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import { App } from './layouts/app'
+import { App } from './layouts/1-column'
 
 import './tailwind.css'
 
