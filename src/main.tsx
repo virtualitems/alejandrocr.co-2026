@@ -1,6 +1,6 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import { ReportsPage } from './pages/reports-page'
+import { PersonsPage } from './pages/persons-page'
 
 import './tailwind.css'
 
@@ -12,6 +12,6 @@ if (rootElement === null) {
 
 createRoot(rootElement).render(
   <StrictMode>
-    <ReportsPage />
+    <PersonsPage />
   </StrictMode>
 )
