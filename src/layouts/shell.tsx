@@ -10,26 +10,22 @@ import {
 } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 
-const user = {
-  name: 'Tom Cook',
-  email: 'tom@example.com',
-  imageUrl:
-    'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
+type User = {
+  name: string
+  email: string
+  imageUrl: string
 }
 
-const navigation = [
-  { name: 'About', href: '#', current: true },
-  { name: 'Persons', href: '#', current: false },
-  { name: 'Inspector', href: '#', current: false },
-  { name: 'Reports', href: '#', current: false },
-  { name: 'Contact', href: '#', current: false }
-]
+type NavItem = {
+  name: string
+  href: string
+  current?: boolean
+}
 
-const userNavigation = [
-  { name: 'Your profile', href: '#' },
-  { name: 'Settings', href: '#' },
-  { name: 'Sign out', href: '#' }
-]
+type UserNavItem = {
+  name: string
+  href: string
+}
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
@@ -37,11 +33,14 @@ function classNames(...classes: string[]) {
 
 type Props = {
   title?: string
+  navigation: NavItem[]
+  user: User
+  userNavigation: UserNavItem[]
   children: ReactNode
 }
 
 export function AppShell(props: Props) {
-  const { title, children } = props
+  const { title, navigation, user, userNavigation, children } = props
   return (
     <div className="h-full grid grid-rows-[auto_1fr_auto]">
       <div className="bg-indigo-600 pb-32 dark:bg-indigo-800">
