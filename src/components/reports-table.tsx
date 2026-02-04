@@ -6,7 +6,7 @@ export type Person = {
   image: string
 }
 
-export type ReportsTableProps = {
+type Props = {
   people: Person[]
   page?: number
   pageSize?: number
@@ -14,7 +14,8 @@ export type ReportsTableProps = {
   onPageChange?: (page: number) => void
 }
 
-export function ReportsTable({ people, page: pageProp, pageSize: pageSizeProp, total: totalProp, onPageChange }: ReportsTableProps) {
+export function ReportsTable(props: Props) {
+  const { people, page: pageProp, pageSize: pageSizeProp, total: totalProp, onPageChange } = props
   const pageSize = pageSizeProp ?? people.length
   const total = totalProp ?? people.length
   const totalPages = Math.max(1, Math.ceil(total / pageSize))
