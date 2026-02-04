@@ -1,7 +1,6 @@
 import { AppShell } from './shell'
 
 type Props = {
-  pageTitle?: string
   columnTitle?: string
   columnNode?: React.ReactNode
   navigation: { name: string; href: string; current?: boolean }[]
@@ -10,9 +9,9 @@ type Props = {
 }
 
 export function Layout(props: Props) {
-  const { pageTitle, columnTitle, columnNode, navigation, user, userNavigation } = props
+  const { columnTitle, columnNode, navigation, user, userNavigation } = props
   return (
-    <AppShell title={pageTitle} navigation={navigation} user={user} userNavigation={userNavigation}>
+    <AppShell navigation={navigation} user={user} userNavigation={userNavigation}>
       <div className="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8">
         <section aria-labelledby="section-1-title">
           <h2 id="section-1-title" className="sr-only">

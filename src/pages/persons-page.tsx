@@ -34,7 +34,6 @@ const userNavigation = [
 export function PersonsPage() {
   return (
     <Layout
-      pageTitle="Persons"
       columnTitle="Persons"
       columnNode={<PersonsTable data={persons} />}
       navigation={navigation}
