@@ -10,15 +10,11 @@ const persons: Person[] = [
   { id: 6, name: 'Floyd Miles', email: 'floyd.miles@example.com' }
 ]
 
-const navigation = [
-  { name: 'About', href: '#', current: false },
-  { name: 'Persons', href: '/persons', current: true },
-  { name: 'Inspector', href: '#', current: false },
-  { name: 'Reports', href: '/reports', current: false },
-  { name: 'Contact', href: '#', current: false }
-]
+type Props = {
+  navigation: { name: string; href: string; current: boolean }[]
+}
 
-export function PersonsPage() {
+export function PersonsPage({ navigation }: Props) {
   return (
     <Layout
       columnTitle="Persons"

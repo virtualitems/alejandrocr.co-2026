@@ -5,6 +5,14 @@ import { Router } from './Router'
 
 import './tailwind.css'
 
+const navigation = [
+  { name: 'About', href: '#' },
+  { name: 'Persons', href: '/persons' },
+  { name: 'Inspector', href: '#' },
+  { name: 'Reports', href: '/reports' },
+  { name: 'Contact', href: '#' }
+]
+
 const rootElement = document.getElementById('root')
 
 if (rootElement === null) {
@@ -14,7 +22,7 @@ if (rootElement === null) {
 createRoot(rootElement).render(
   <StrictMode>
     <BrowserRouter>
-      <Router />
+      <Router navigation={navigation} />
     </BrowserRouter>
   </StrictMode>
 )

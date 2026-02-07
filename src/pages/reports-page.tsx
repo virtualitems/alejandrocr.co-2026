@@ -42,13 +42,9 @@ const people: Person[] = [
 	}
 ]
 
-const navigation = [
-	{ name: 'About', href: '#', current: false },
-	{ name: 'Persons', href: '/persons', current: false },
-	{ name: 'Inspector', href: '#', current: false },
-	{ name: 'Reports', href: '/reports', current: true },
-	{ name: 'Contact', href: '#', current: false }
-]
+type Props = {
+	navigation: { name: string; href: string; current: boolean }[]
+}
 
 const bot = {
 	name: 'AI Assistant',
@@ -76,7 +72,7 @@ const initialMessages: Message[] = [
 	}
 ]
 
-export function ReportsPage() {
+export function ReportsPage({ navigation }: Props) {
 	return (
 		<Layout
 			leftColumnTitle="Table"
