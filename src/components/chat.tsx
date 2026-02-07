@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react'
 import { Avatar } from './catalyst-ui-kit/avatar'
 import { Button } from './catalyst-ui-kit/button'
 import { Input } from './catalyst-ui-kit/input'
+import './chat.css'
 
 export type Message = {
   id: string
@@ -9,6 +10,8 @@ export type Message = {
   sender: 'user' | 'bot'
   timestamp: Date
 }
+
+type ChatHeight = 'sm' | 'md' | 'lg' | 'xl' | '2xl' | 'full' | 'screen'
 
 type Props = {
   user: {
@@ -21,10 +24,21 @@ type Props = {
   }
   initialMessages?: Message[]
   onSendMessage?: (message: string) => void
+  height: ChatHeight
+}
+
+const heightClasses = {
+  sm: 'h-64',
+  md: 'h-96',
+  lg: 'h-[32rem]',
+  xl: 'h-[40rem]',
+  '2xl': 'h-[48rem]',
+  full: 'h-full',
+  screen: 'h-screen'
 }
 
 export function Chat(props: Props) {
-  const { user, bot, initialMessages = [], onSendMessage } = props
+  const { user, bot, initialMessages = [], onSendMessage, height } = props
   const [messages, setMessages] = useState<Message[]>(initialMessages)
   const [inputValue, setInputValue] = useState('')
   const messagesEndRef = useRef<HTMLDivElement>(null)
@@ -73,7 +87,7 @@ export function Chat(props: Props) {
   }
 
   return (
-    <div className="flex h-full flex-col">
+    <div className={`flex flex-col ${heightClasses[height]}`}>
       {/* Chat Header */}
       <div className="flex items-center gap-3 border-b border-gray-200 pb-4 dark:border-gray-700">
         <Avatar src={bot.imageUrl} className="size-10" />
@@ -88,7 +102,7 @@ export function Chat(props: Props) {
       </div>
 
       {/* Messages Container */}
-      <div className="flex-1 overflow-y-auto py-4 space-y-4">
+      <div className="chat-messages-container flex-1 overflow-y-auto py-4 space-y-4 min-h-0 pr-2">
         {messages.length === 0 && (
           <div className="flex h-full items-center justify-center">
             <p className="text-sm text-gray-500 dark:text-gray-400">

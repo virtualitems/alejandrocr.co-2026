@@ -80,6 +80,7 @@ export function ReportsPage({ navigation }: Props) {
 			rightColumnTitle="Chat"
 			rightColumnNode={
 				<Chat
+					height="md"
 					user={user}
 					bot={bot}
 					initialMessages={initialMessages}
