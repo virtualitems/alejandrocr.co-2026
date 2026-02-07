@@ -22,7 +22,7 @@ export function PersonsTable(props: Props) {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-base font-semibold text-gray-900 dark:text-white">Persons</h2>
-          <p className="text-sm text-gray-600 dark:text-gray-300">Manage your contacts to enable full CRUD flows.</p>
+          <p className="text-sm text-gray-600 dark:text-gray-300">Add people to enable report generation</p>
         </div>
         <button
           type="button"
