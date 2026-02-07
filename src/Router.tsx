@@ -1,6 +1,7 @@
 import { Routes, Route, Navigate } from 'react-router'
 import { PersonsPage } from './pages/persons-page'
 import { ReportsPage } from './pages/reports-page'
+import { InspectorPage } from './pages/inspector-page'
 import { useNavigation } from './hooks/useNavigation'
 import type { NavigationItem } from './types/navigation'
 
@@ -15,6 +16,7 @@ export function Router({ navigation }: Props) {
     <Routes>
       <Route path="/" element={<Navigate to="/persons" replace />} />
       <Route path="/persons" element={<PersonsPage navigation={currentNavigation} />} />
+      <Route path="/inspector" element={<InspectorPage navigation={currentNavigation} />} />
       <Route path="/reports" element={<ReportsPage navigation={currentNavigation} />} />
     </Routes>
   )

@@ -8,7 +8,7 @@ import './tailwind.css'
 const navigation = [
   { name: 'About', href: '#' },
   { name: 'Persons', href: '/persons' },
-  { name: 'Inspector', href: '#' },
+  { name: 'Inspector', href: '/inspector' },
   { name: 'Reports', href: '/reports' },
   { name: 'Contact', href: '#' }
 ]
