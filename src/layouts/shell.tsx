@@ -23,11 +23,6 @@ type NavItem = {
   current?: boolean
 }
 
-type UserNavItem = {
-  name: string
-  href: string
-}
-
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
@@ -36,12 +31,11 @@ type Props = {
   title?: string
   navigation: NavItem[]
   user: User
-  userNavigation: UserNavItem[]
   children: ReactNode
 }
 
 export function AppShell(props: Props) {
-  const { title, navigation, user, userNavigation, children } = props
+  const { title, navigation, user, children } = props
   return (
     <div className="h-full grid grid-rows-[auto_1fr_auto]">
       <div className="bg-indigo-600 pb-42 dark:bg-indigo-800">
@@ -120,16 +114,30 @@ export function AppShell(props: Props) {
                       transition
                       className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg outline-1 outline-black/5 transition data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in dark:bg-gray-800 dark:-outline-offset-1 dark:outline-white/10"
                     >
-                      {userNavigation.map((item) => (
-                        <MenuItem key={item.name}>
-                          <a
-                            href={item.href}
-                            className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden dark:text-gray-200 dark:data-focus:bg-white/5"
-                          >
-                            {item.name}
-                          </a>
-                        </MenuItem>
-                      ))}
+                      <MenuItem>
+                        <a
+                          href="https://example.com"
+                          className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden dark:text-gray-200 dark:data-focus:bg-white/5"
+                        >
+                          Your profile
+                        </a>
+                      </MenuItem>
+                      <MenuItem>
+                        <a
+                          href="https://example.com"
+                          className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden dark:text-gray-200 dark:data-focus:bg-white/5"
+                        >
+                          Settings
+                        </a>
+                      </MenuItem>
+                      <MenuItem>
+                        <a
+                          href="https://example.com"
+                          className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden dark:text-gray-200 dark:data-focus:bg-white/5"
+                        >
+                          Sign out
+                        </a>
+                      </MenuItem>
                     </MenuItems>
                   </Menu>
                 </div>
@@ -183,16 +191,27 @@ export function AppShell(props: Props) {
                 </button>
               </div>
               <div className="mt-3 space-y-1 px-2">
-                {userNavigation.map((item) => (
-                  <DisclosureButton
-                    key={item.name}
-                    as="a"
-                    href={item.href}
-                    className="block rounded-md px-3 py-2 text-base font-medium text-white hover:bg-indigo-500/75 dark:hover:bg-indigo-700/75"
-                  >
-                    {item.name}
-                  </DisclosureButton>
-                ))}
+                <DisclosureButton
+                  as="a"
+                  href="https://example.com"
+                  className="block rounded-md px-3 py-2 text-base font-medium text-white hover:bg-indigo-500/75 dark:hover:bg-indigo-700/75"
+                >
+                  Your profile
+                </DisclosureButton>
+                <DisclosureButton
+                  as="a"
+                  href="https://example.com"
+                  className="block rounded-md px-3 py-2 text-base font-medium text-white hover:bg-indigo-500/75 dark:hover:bg-indigo-700/75"
+                >
+                  Settings
+                </DisclosureButton>
+                <DisclosureButton
+                  as="a"
+                  href="https://example.com"
+                  className="block rounded-md px-3 py-2 text-base font-medium text-white hover:bg-indigo-500/75 dark:hover:bg-indigo-700/75"
+                >
+                  Sign out
+                </DisclosureButton>
               </div>
             </div>
           </DisclosurePanel>

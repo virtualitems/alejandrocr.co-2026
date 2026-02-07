@@ -8,7 +8,6 @@ type Props = {
   rightColumnNode?: React.ReactNode
   navigation: { name: string; href: string; current?: boolean }[]
   user: { name: string; email: string; imageUrl: string }
-  userNavigation: { name: string; href: string }[]
 }
 
 export function Layout(props: Props) {
@@ -19,15 +18,13 @@ export function Layout(props: Props) {
     leftColumnNode,
     rightColumnNode,
     navigation,
-    user,
-    userNavigation
+    user
   } = props
   return (
     <AppShell
       title={pageTitle}
       navigation={navigation}
       user={user}
-      userNavigation={userNavigation}
     >
       <div className="h-full mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8">
         <div className="h-full grid grid-cols-1 items-stretch gap-4 lg:grid-cols-3 lg:gap-8">

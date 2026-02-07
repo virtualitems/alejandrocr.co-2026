@@ -50,12 +50,6 @@ const navigation = [
 	{ name: 'Contact', href: '#', current: false }
 ]
 
-const userNavigation = [
-	{ name: 'Your profile', href: '#' },
-	{ name: 'Settings', href: '#' },
-	{ name: 'Sign out', href: '#' }
-]
-
 const bot = {
 	name: 'AI Assistant',
 	imageUrl: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
@@ -100,7 +94,6 @@ export function ReportsPage() {
 			}
 			navigation={navigation}
 			user={user}
-			userNavigation={userNavigation}
 		/>
 	)
 }

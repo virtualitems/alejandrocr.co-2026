@@ -1,23 +1,24 @@
 import { AppShell } from './shell'
 
+type ColumnWidth =
+  | 'sm'
+  | 'md'
+  | 'lg'
+  | 'xl'
+  | '2xl'
+  | '3xl'
+  | '4xl'
+  | '5xl'
+  | '6xl'
+  | '7xl'
+  | 'full'
+
 type Props = {
   columnTitle?: string
   columnNode?: React.ReactNode
-  columnWidth?:
-    | 'sm'
-    | 'md'
-    | 'lg'
-    | 'xl'
-    | '2xl'
-    | '3xl'
-    | '4xl'
-    | '5xl'
-    | '6xl'
-    | '7xl'
-    | 'full'
+  columnWidth?: ColumnWidth
   navigation: { name: string; href: string; current?: boolean }[]
   user: { name: string; email: string; imageUrl: string }
-  userNavigation: { name: string; href: string }[]
 }
 
 const widthClasses = {
@@ -40,15 +41,13 @@ export function Layout(props: Props) {
     columnNode,
     columnWidth = '7xl',
     navigation,
-    user,
-    userNavigation
+    user
   } = props
 
   return (
     <AppShell
       navigation={navigation}
       user={user}
-      userNavigation={userNavigation}
     >
       <div
         className={`mx-auto ${widthClasses[columnWidth]} px-4 pb-12 sm:px-6 lg:px-8`}

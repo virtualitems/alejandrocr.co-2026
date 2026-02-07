@@ -25,12 +25,6 @@ const navigation = [
   { name: 'Contact', href: '#', current: false }
 ]
 
-const userNavigation = [
-  { name: 'Your profile', href: '#' },
-  { name: 'Settings', href: '#' },
-  { name: 'Sign out', href: '#' }
-]
-
 export function PersonsPage() {
   return (
     <Layout
@@ -38,7 +32,6 @@ export function PersonsPage() {
       columnNode={<PersonsTable data={persons} />}
       navigation={navigation}
       user={user}
-      userNavigation={userNavigation}
     />
   )
 }
