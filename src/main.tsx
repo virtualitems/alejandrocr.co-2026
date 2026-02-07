@@ -1,6 +1,7 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import { PersonsPage } from './pages/persons-page'
+import { BrowserRouter } from 'react-router'
+import { Router } from './Router'
 
 import './tailwind.css'
 
@@ -12,6 +13,8 @@ if (rootElement === null) {
 
 createRoot(rootElement).render(
   <StrictMode>
-    <PersonsPage />
+    <BrowserRouter>
+      <Router />
+    </BrowserRouter>
   </StrictMode>
 )

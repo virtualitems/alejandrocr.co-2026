@@ -1,4 +1,5 @@
 import { type ReactNode } from 'react'
+import { Link } from 'react-router'
 import {
   Disclosure,
   DisclosureButton,
@@ -61,9 +62,9 @@ export function AppShell(props: Props) {
                 <div className="hidden lg:ml-10 lg:block">
                   <div className="flex space-x-4">
                     {navigation.map((item) => (
-                      <a
+                      <Link
                         key={item.name}
-                        href={item.href}
+                        to={item.href}
                         aria-current={item.current ? 'page' : undefined}
                         className={classNames(
                           item.current
@@ -73,7 +74,7 @@ export function AppShell(props: Props) {
                         )}
                       >
                         {item.name}
-                      </a>
+                      </Link>
                     ))}
                   </div>
                 </div>
@@ -141,8 +142,8 @@ export function AppShell(props: Props) {
               {navigation.map((item) => (
                 <DisclosureButton
                   key={item.name}
-                  as="a"
-                  href={item.href}
+                  as={Link}
+                  to={item.href}
                   aria-current={item.current ? 'page' : undefined}
                   className={classNames(
                     item.current

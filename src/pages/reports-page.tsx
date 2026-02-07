@@ -44,9 +44,9 @@ const people: Person[] = [
 
 const navigation = [
 	{ name: 'About', href: '#', current: false },
-	{ name: 'Persons', href: '#', current: false },
+	{ name: 'Persons', href: '/persons', current: false },
 	{ name: 'Inspector', href: '#', current: false },
-	{ name: 'Reports', href: '#', current: true },
+	{ name: 'Reports', href: '/reports', current: true },
 	{ name: 'Contact', href: '#', current: false }
 ]
 
