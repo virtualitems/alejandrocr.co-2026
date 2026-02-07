@@ -93,7 +93,6 @@ export function ReportsPage() {
 				/>
 			}
 			navigation={navigation}
-			user={user}
 		/>
 	)
 }

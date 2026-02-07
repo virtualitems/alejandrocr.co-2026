@@ -18,7 +18,6 @@ type Props = {
   columnNode?: React.ReactNode
   columnWidth?: ColumnWidth
   navigation: { name: string; href: string; current?: boolean }[]
-  user: { name: string; email: string; imageUrl: string }
 }
 
 const widthClasses = {
@@ -40,14 +39,12 @@ export function Layout(props: Props) {
     columnTitle,
     columnNode,
     columnWidth = '7xl',
-    navigation,
-    user
+    navigation
   } = props
 
   return (
     <AppShell
       navigation={navigation}
-      user={user}
     >
       <div
         className={`mx-auto ${widthClasses[columnWidth]} px-4 pb-12 sm:px-6 lg:px-8`}

@@ -11,12 +11,6 @@ import {
 } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 
-type User = {
-  name: string
-  email: string
-  imageUrl: string
-}
-
 type NavItem = {
   name: string
   href: string
@@ -30,12 +24,17 @@ function classNames(...classes: string[]) {
 type Props = {
   title?: string
   navigation: NavItem[]
-  user: User
   children: ReactNode
 }
 
+const user = {
+  name: 'Alejandro Carrasco Rodríguez',
+  email: 'contacto@alejandrocr.co',
+  imageUrl: '/avatar.webp'
+}
+
 export function AppShell(props: Props) {
-  const { title, navigation, user, children } = props
+  const { title, navigation, children } = props
   return (
     <div className="h-full grid grid-rows-[auto_1fr_auto]">
       <div className="bg-indigo-600 pb-42 dark:bg-indigo-800">
@@ -116,26 +115,29 @@ export function AppShell(props: Props) {
                     >
                       <MenuItem>
                         <a
-                          href="https://example.com"
+                          target="_blank"
+                          href="https://alejandrocr.co"
                           className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden dark:text-gray-200 dark:data-focus:bg-white/5"
                         >
-                          Your profile
+                          Website
                         </a>
                       </MenuItem>
                       <MenuItem>
                         <a
-                          href="https://example.com"
+                          target="_blank"
+                          href="https://github.com/virtualitems"
                           className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden dark:text-gray-200 dark:data-focus:bg-white/5"
                         >
-                          Settings
+                          Github
                         </a>
                       </MenuItem>
                       <MenuItem>
                         <a
-                          href="https://example.com"
+                          target="_blank"
+                          href="https://www.linkedin.com/in/alejandro-carrasco-web-ai-engineer"
                           className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden dark:text-gray-200 dark:data-focus:bg-white/5"
                         >
-                          Sign out
+                          LinkedIn
                         </a>
                       </MenuItem>
                     </MenuItems>
