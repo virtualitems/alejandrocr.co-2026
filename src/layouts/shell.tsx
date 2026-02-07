@@ -10,15 +10,12 @@ import {
   MenuItems
 } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { clsx } from 'clsx'
 
 type NavItem = {
   name: string
   href: string
   current?: boolean
-}
-
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(' ')
 }
 
 type Props = {
@@ -59,7 +56,7 @@ export function AppShell(props: Props) {
                         key={item.name}
                         to={item.href}
                         aria-current={item.current ? 'page' : undefined}
-                        className={classNames(
+                        className={clsx(
                           item.current
                             ? 'bg-indigo-700 text-white dark:bg-indigo-950/40'
                             : 'text-white hover:bg-indigo-500/75 dark:hover:bg-indigo-700/75',
@@ -155,7 +152,7 @@ export function AppShell(props: Props) {
                   as={Link}
                   to={item.href}
                   aria-current={item.current ? 'page' : undefined}
-                  className={classNames(
+                  className={clsx(
                     item.current
                       ? 'bg-indigo-700 text-white dark:bg-indigo-950/40'
                       : 'text-white hover:bg-indigo-500/75 dark:hover:bg-indigo-700/75',
