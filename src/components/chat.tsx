@@ -130,15 +130,15 @@ export function Chat(props: Props) {
       <div className="flex gap-2 border-t border-gray-200 pt-4 dark:border-gray-700">
         <Input
           type="text"
-          placeholder="Type a message..."
+          placeholder={isLoading ? 'Loading...' : 'Type a message...'}
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
           onKeyPress={handleKeyPress}
           className="flex-1"
           disabled={isLoading}
         />
-        <Button onClick={handleSend} color="indigo" disabled={isLoading}>
-          {isLoading ? 'Sending...' : 'Send'}
+        <Button onClick={handleSend} color="indigo" disabled={isLoading || inputValue.trim() === ''}>
+          Send
         </Button>
       </div>
     </div>
