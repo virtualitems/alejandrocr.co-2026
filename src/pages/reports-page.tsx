@@ -52,7 +52,7 @@ const bot = {
 
 export function ReportsPage({ navigation }: Props) {
 	const { messages, isLoading, sendMessage, clearMessages } = useChatbot({
-		apiUrl: 'https://ia.allup.com.co/chatbot/text-to-text'
+		baseUrl: 'https://ia.allup.com.co'
 	})
 
 	return (
