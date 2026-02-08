@@ -3,6 +3,8 @@ import { ChevronLeftIcon, ChevronRightIcon, TrashIcon } from '@heroicons/react/2
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react'
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 import type { Report } from '../services/reports'
+import 'lightbox2/dist/css/lightbox.min.css'
+import 'lightbox2'
 
 type Props = {
   reports: Report[]
@@ -125,9 +127,9 @@ export function ReportsTable(props: Props) {
                       <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">
                         <a
                           href={report.evidence}
+                          data-lightbox={`report-${report.id}`}
+                          data-title={`${report.person.name} - ${formatDate(report.created_at)}`}
                           className="select-none cursor-pointer text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300"
-                          target="_blank"
-                          rel="noreferrer"
                         >
                           View Image
                         </a>
