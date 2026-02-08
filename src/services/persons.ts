@@ -41,7 +41,8 @@ export class PersonsService {
       throw new Error(`Failed to fetch persons: ${response.statusText}`)
     }
 
-    return response.json()
+    const result = await response.json()
+    return result.data || []
   }
 
   /**
@@ -62,13 +63,14 @@ export class PersonsService {
       throw new Error(`Failed to fetch person: ${response.statusText}`)
     }
 
-    return response.json()
+    const result = await response.json()
+    return result.data
   }
 
   /**
    * Crea una nueva persona
    */
-  async create(person: PersonCreate): Promise<Person> {
+  async create(person: PersonCreate): Promise<void> {
     const response = await fetch(`${this.baseUrl}/persons`, {
       method: 'POST',
       headers: {
@@ -84,13 +86,12 @@ export class PersonsService {
       throw new Error(`Failed to create person: ${response.statusText}`)
     }
 
-    return response.json()
   }
 
   /**
    * Actualiza una persona existente
    */
-  async update(id: number, person: PersonUpdate): Promise<Person> {
+  async update(id: number, person: PersonUpdate): Promise<void> {
     const response = await fetch(`${this.baseUrl}/persons/${id}`, {
       method: 'PUT',
       headers: {
@@ -109,7 +110,6 @@ export class PersonsService {
       throw new Error(`Failed to update person: ${response.statusText}`)
     }
 
-    return response.json()
   }
 
   /**

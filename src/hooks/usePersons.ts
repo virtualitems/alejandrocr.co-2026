@@ -34,23 +34,23 @@ export function usePersons(): UsePersonsResult {
 
   const create = useCallback(async (person: PersonCreate) => {
     try {
-      const newPerson = await personsService.create(person)
-      setPersons(prev => [...prev, newPerson])
+      await personsService.create(person)
+      await refresh()
     } catch (err) {
       console.error('Error creating person:', err)
       throw err
     }
-  }, [])
+  }, [refresh])
 
   const update = useCallback(async (id: number, person: PersonUpdate) => {
     try {
-      const updatedPerson = await personsService.update(id, person)
-      setPersons(prev => prev.map(p => p.id === id ? updatedPerson : p))
+      await personsService.update(id, person)
+      await refresh()
     } catch (err) {
       console.error('Error updating person:', err)
       throw err
     }
-  }, [])
+  }, [refresh])
 
   const remove = useCallback(async (id: number) => {
     try {

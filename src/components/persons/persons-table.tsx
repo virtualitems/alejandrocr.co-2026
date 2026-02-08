@@ -65,29 +65,25 @@ export function PersonsTable(props: Props) {
                         {person.email}
                       </td>
                       <td className="py-4 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-6">
-                        <div className="inline-flex items-center gap-2">
-                          <Button
+                        <div className="inline-flex items-center gap-3">
+                          <button
                             type="button"
-                            plain
                             onClick={() => onUpdate?.(person)}
                             disabled={!onUpdate}
-                            className="select-none cursor-pointer"
+                            className="select-none cursor-pointer inline-flex items-center gap-1 text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300 disabled:opacity-50 disabled:cursor-not-allowed"
                           >
-                            <PencilSquareIcon />
+                            <PencilSquareIcon className="h-4 w-4" />
                             Edit
-                            <span className="sr-only">{person.name}</span>
-                          </Button>
-                          <Button
+                          </button>
+                          <button
                             type="button"
-                            plain
                             onClick={() => onRemove?.(person)}
                             disabled={!onRemove}
-                            className="select-none cursor-pointer text-red-600 hover:text-red-700 data-hover:bg-red-50 dark:text-red-400 dark:hover:text-red-300 dark:data-hover:bg-red-500/10"
+                            className="select-none cursor-pointer inline-flex items-center gap-1 text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 disabled:opacity-50 disabled:cursor-not-allowed"
                           >
-                            <TrashIcon />
+                            <TrashIcon className="h-4 w-4" />
                             Remove
-                            <span className="sr-only">{person.name}</span>
-                          </Button>
+                          </button>
                         </div>
                       </td>
                     </tr>
