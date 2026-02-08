@@ -137,7 +137,7 @@ export function Chat(props: Props) {
           className="flex-1"
           disabled={isLoading}
         />
-        <Button onClick={handleSend} color="indigo" disabled={isLoading || inputValue.trim() === ''}>
+        <Button onClick={handleSend} color="indigo" disabled={isLoading || inputValue.trim() === ''} className='cursor-pointer select-none'>
           Send
         </Button>
       </div>
