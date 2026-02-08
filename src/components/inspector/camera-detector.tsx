@@ -122,6 +122,12 @@ export function CameraDetector() {
 
         {/* Person Selector */}
         <div className="w-full">
+          <label
+            htmlFor="person-select"
+            className="select-none cursor-pointer block text-sm/6 font-medium text-gray-900 dark:text-white mb-2"
+          >
+            Identify Detected Person
+          </label>
           <Select
             id="person-select"
             name="person"
@@ -143,6 +149,34 @@ export function CameraDetector() {
               </option>
             ))}
           </Select>
+        </div>
+
+        <div className="w-full">
+          <label
+            htmlFor="observations-textarea"
+            className="select-none cursor-pointer block text-sm/6 font-medium text-gray-900 dark:text-white mb-2"
+          >
+            Add an observation (Optional)
+          </label>
+          <textarea
+            id="observations-textarea"
+            name="observations"
+            placeholder="Write any notes or observations about the detected person here..."
+            rows={4}
+            className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-indigo-500"
+            defaultValue={''}
+          />
+        </div>
+
+        <div className="w-full">
+          <Button
+            color="violet"
+            // onClick={}
+            className="w-full cursor-pointer select-none"
+          >
+            <span className="mr-1">📝</span>
+            Create Report
+          </Button>
         </div>
       </div>
 
