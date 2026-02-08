@@ -19,15 +19,19 @@ const bot = {
 }
 
 export function ReportsPage({ navigation }: Props) {
-	const { reports, isLoading } = useReports()
+	const { reports, isLoading, deleteReport } = useReports()
 	const { messages, isLoading: isChatLoading, sendMessage, clearMessages } = useChatbot({
 		baseUrl: 'https://ia.allup.com.co'
 	})
 
+	const handleDelete = async (id: number) => {
+		await deleteReport(id)
+	}
+
 	return (
 		<Layout
 			leftColumnTitle="Reports"
-			leftColumnNode={<ReportsTable reports={reports} isLoading={isLoading} />}
+			leftColumnNode={<ReportsTable reports={reports} isLoading={isLoading} onDelete={handleDelete} />}
 			rightColumnTitle="Chat"
 			rightColumnNode={
 				<Chat
