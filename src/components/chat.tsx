@@ -22,9 +22,10 @@ type Props = {
     name: string
     imageUrl: string
   }
-  initialMessages?: Message[]
-  onSendMessage?: (message: string) => void
+  messages: Message[]
+  onSendMessage: (message: string) => void
   height: ChatHeight
+  isLoading?: boolean
 }
 
 const heightClasses = {
@@ -38,8 +39,7 @@ const heightClasses = {
 }
 
 export function Chat(props: Props) {
-  const { user, bot, initialMessages = [], onSendMessage, height } = props
-  const [messages, setMessages] = useState<Message[]>(initialMessages)
+  const { user, bot, messages, onSendMessage, height, isLoading = false } = props
   const [inputValue, setInputValue] = useState('')
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
@@ -52,32 +52,11 @@ export function Chat(props: Props) {
   }, [messages])
 
   const handleSend = () => {
-    if (inputValue.trim() === '') return
+    if (inputValue.trim() === '' || isLoading) return
 
-    const newMessage: Message = {
-      id: Date.now().toString(),
-      text: inputValue,
-      sender: 'user',
-      timestamp: new Date()
-    }
-
-    setMessages((prev) => [...prev, newMessage])
+    const message = inputValue
     setInputValue('')
-
-    if (onSendMessage) {
-      onSendMessage(inputValue)
-    }
-
-    // Simulate bot response
-    setTimeout(() => {
-      const botResponse: Message = {
-        id: (Date.now() + 1).toString(),
-        text: 'Thanks for your message! This is an automated response.',
-        sender: 'bot',
-        timestamp: new Date()
-      }
-      setMessages((prev) => [...prev, botResponse])
-    }, 1000)
+    onSendMessage(message)
   }
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -96,7 +75,7 @@ export function Chat(props: Props) {
             {bot.name}
           </h3>
           <p className="text-xs text-gray-500 dark:text-gray-400">
-            Online
+            {isLoading ? 'Thinking...' : 'Online'}
           </p>
         </div>
       </div>
@@ -145,9 +124,10 @@ export function Chat(props: Props) {
           onChange={(e) => setInputValue(e.target.value)}
           onKeyPress={handleKeyPress}
           className="flex-1"
+          disabled={isLoading}
         />
-        <Button onClick={handleSend} color="indigo">
-          Send
+        <Button onClick={handleSend} color="indigo" disabled={isLoading}>
+          {isLoading ? 'Sending...' : 'Send'}
         </Button>
       </div>
     </div>
