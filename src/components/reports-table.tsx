@@ -10,7 +10,7 @@ type Props = {
   pageSize?: number
   total?: number
   onPageChange?: (page: number) => void
-  onDelete?: (id: number) => void
+  onDelete?: (reportId: number) => void
   isLoading?: boolean
 }
 
@@ -39,14 +39,8 @@ export function ReportsTable(props: Props) {
     })
   }
 
-  const getImageUrl = (path: string) => {
-    const isLocalhost = ['localhost', '127.0.0.1'].includes(window.location.hostname)
-    const baseUrl = isLocalhost ? 'https://ia.allup.com.co' : window.location.origin
-    return `${baseUrl}/${path}`
-  }
-
-  const handleDeleteClick = (id: number) => {
-    setReportToDelete(id)
+  const handleDeleteClick = (reportId: number) => {
+    setReportToDelete(reportId)
     setDeleteDialogOpen(true)
   }
 
@@ -75,7 +69,7 @@ export function ReportsTable(props: Props) {
                     scope="col"
                     className="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 sm:pl-6 dark:text-gray-200"
                   >
-                    Person ID
+                    Person Name
                   </th>
                   <th
                     scope="col"
@@ -120,7 +114,7 @@ export function ReportsTable(props: Props) {
                   reports.map((report) => (
                     <tr key={report.id}>
                       <td className="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-6 dark:text-white">
-                        {report.person_id}
+                        {report.person.name}
                       </td>
                       <td className="px-3 py-4 text-sm text-gray-500 dark:text-gray-400 max-w-xs truncate">
                         {report.observations || <span className="italic text-gray-400">No observations</span>}
@@ -130,7 +124,7 @@ export function ReportsTable(props: Props) {
                       </td>
                       <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">
                         <a
-                          href={getImageUrl(report.evidence)}
+                          href={report.evidence}
                           className="select-none cursor-pointer text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300"
                           target="_blank"
                           rel="noreferrer"

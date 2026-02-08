@@ -23,10 +23,10 @@ export function useReports(personId?: number) {
     }
   }, [personId])
 
-  const deleteReport = useCallback(async (id: number) => {
+  const deleteReport = useCallback(async (reportId: number) => {
     try {
-      await reportsService.current.delete(id)
-      setReports((prev) => prev.filter((report) => report.id !== id))
+      await reportsService.current.delete(reportId)
+      setReports((prev) => prev.filter((report) => report.id !== reportId))
       return true
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Failed to delete report'

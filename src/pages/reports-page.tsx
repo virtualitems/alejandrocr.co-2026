@@ -24,8 +24,8 @@ export function ReportsPage({ navigation }: Props) {
 		baseUrl: 'https://ia.allup.com.co'
 	})
 
-	const handleDelete = async (id: number) => {
-		await deleteReport(id)
+	const handleDelete = (reportId: number) => {
+		deleteReport(reportId)
 	}
 
 	return (

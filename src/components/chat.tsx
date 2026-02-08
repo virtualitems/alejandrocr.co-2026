@@ -103,8 +103,10 @@ export function Chat(props: Props) {
       <div className="chat-messages-container flex-1 overflow-y-auto py-4 space-y-4 min-h-0 pr-2">
         {messages.length === 0 && (
           <div className="flex h-full items-center justify-center">
-            <p className="text-sm text-gray-500 dark:text-gray-400">
-              No messages yet. Start a conversation!
+            <p className="text-sm text-center text-gray-500 dark:text-gray-400">
+              Hey! 😊
+              <br />
+              How can I assist you today?
             </p>
           </div>
         )}

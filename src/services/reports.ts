@@ -1,20 +1,17 @@
 export type Report = {
   id: number
-  person_id: number
+  person: {
+    name: string
+  }
   observations: string
   evidence: string
   created_at: string
-  deleted_at: string | null
 }
 
 export type CreateReportData = {
   person_id: number
   observations: string
   evidence: File
-}
-
-type SingleReportResponse = {
-  data: Report
 }
 
 type ListReportResponse = {
@@ -31,7 +28,7 @@ export class ReportsService {
       : `${window.location.origin}/reports`
   }
 
-  async create(data: CreateReportData): Promise<Report> {
+  async create(data: CreateReportData): Promise<void> {
     const formData = new FormData()
     formData.append('person_id', data.person_id.toString())
     formData.append('observations', data.observations)
@@ -46,9 +43,6 @@ export class ReportsService {
       const errorData = await response.json().catch(() => ({ detail: 'Unknown error' }))
       throw new Error(errorData.detail || `HTTP error! status: ${response.status}`)
     }
-
-    const result: SingleReportResponse = await response.json()
-    return result.data
   }
 
   async getAll(personId?: number): Promise<Report[]> {
@@ -66,19 +60,8 @@ export class ReportsService {
     return result.data
   }
 
-  async getById(id: number): Promise<Report> {
-    const response = await fetch(`${this.baseUrl}/${id}`)
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`)
-    }
-
-    const result: SingleReportResponse = await response.json()
-    return result.data
-  }
-
-  async delete(id: number): Promise<void> {
-    const response = await fetch(`${this.baseUrl}/${id}`, {
+  async delete(reportId: number): Promise<void> {
+    const response = await fetch(`${this.baseUrl}/${reportId}`, {
       method: 'DELETE'
     })
 
