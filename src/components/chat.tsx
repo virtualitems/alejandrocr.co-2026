@@ -41,7 +41,15 @@ const heightClasses = {
 }
 
 export function Chat(props: Props) {
-  const { user, bot, messages, onSendMessage, onClear, height, isLoading = false } = props
+  const {
+    user,
+    bot,
+    messages,
+    onSendMessage,
+    onClear,
+    height,
+    isLoading = false
+  } = props
   const [inputValue, setInputValue] = useState('')
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
@@ -137,7 +145,12 @@ export function Chat(props: Props) {
           className="flex-1"
           disabled={isLoading}
         />
-        <Button onClick={handleSend} color="indigo" disabled={isLoading || inputValue.trim() === ''} className='cursor-pointer select-none'>
+        <Button
+          onClick={handleSend}
+          color="indigo"
+          disabled={isLoading || inputValue.trim() === ''}
+          className="cursor-pointer select-none"
+        >
           Send
         </Button>
       </div>
