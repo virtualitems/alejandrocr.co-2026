@@ -1,29 +1,42 @@
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/20/solid'
-
-export type Person = {
-  name: string
-  timestamp: string
-  image: string
-}
+import type { Report } from '../services/reports'
 
 type Props = {
-  people: Person[]
+  reports: Report[]
   page?: number
   pageSize?: number
   total?: number
   onPageChange?: (page: number) => void
+  isLoading?: boolean
 }
 
 export function ReportsTable(props: Props) {
-  const { people, page: pageProp, pageSize: pageSizeProp, total: totalProp, onPageChange } = props
-  const pageSize = pageSizeProp ?? people.length
-  const total = totalProp ?? people.length
+  const { reports = [], page: pageProp, pageSize: pageSizeProp, total: totalProp, onPageChange, isLoading } = props
+  const pageSize = pageSizeProp ?? (reports.length || 10)
+  const total = totalProp ?? (reports.length || 0)
   const totalPages = Math.max(1, Math.ceil(total / pageSize))
   const page = Math.min(Math.max(pageProp ?? 1, 1), totalPages)
   const start = total === 0 ? 0 : (page - 1) * pageSize + 1
   const end = Math.min(total, page * pageSize)
   const canGoPrev = page > 1 && Boolean(onPageChange)
   const canGoNext = page < totalPages && Boolean(onPageChange)
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString)
+    return date.toLocaleString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    })
+  }
+
+  const getImageUrl = (path: string) => {
+    const isLocalhost = ['localhost', '127.0.0.1'].includes(window.location.hostname)
+    const baseUrl = isLocalhost ? 'https://ia.allup.com.co' : window.location.origin
+    return `${baseUrl}/${path}`
+  }
 
   return (
     <div className="space-y-3">
@@ -37,43 +50,75 @@ export function ReportsTable(props: Props) {
                     scope="col"
                     className="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 sm:pl-6 dark:text-gray-200"
                   >
-                    Name
+                    ID
                   </th>
                   <th
                     scope="col"
                     className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-gray-200"
                   >
-                    Timestamp
+                    Person ID
                   </th>
                   <th
                     scope="col"
                     className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-gray-200"
                   >
-                    Image
+                    Observations
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-gray-200"
+                  >
+                    Created At
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-gray-200"
+                  >
+                    Evidence
                   </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200 bg-white dark:divide-white/10 dark:bg-gray-800/50">
-                {people.map((person) => (
-                  <tr key={`${person.name}-${person.timestamp}`}>
-                    <td className="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-6 dark:text-white">
-                      {person.name}
-                    </td>
-                    <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">
-                      {person.timestamp}
-                    </td>
-                    <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">
-                      <a
-                        href={person.image}
-                        className="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300"
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        {person.image}
-                      </a>
+                {isLoading ? (
+                  <tr>
+                    <td colSpan={5} className="py-8 text-center text-sm text-gray-500 dark:text-gray-400">
+                      Loading reports...
                     </td>
                   </tr>
-                ))}
+                ) : reports.length === 0 ? (
+                  <tr>
+                    <td colSpan={5} className="py-8 text-center text-sm text-gray-500 dark:text-gray-400">
+                      No reports found
+                    </td>
+                  </tr>
+                ) : (
+                  reports.map((report) => (
+                    <tr key={report.id}>
+                      <td className="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-6 dark:text-white">
+                        {report.id}
+                      </td>
+                      <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">
+                        {report.person_id}
+                      </td>
+                      <td className="px-3 py-4 text-sm text-gray-500 dark:text-gray-400 max-w-xs truncate">
+                        {report.observations || <span className="italic text-gray-400">No observations</span>}
+                      </td>
+                      <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">
+                        {formatDate(report.created_at)}
+                      </td>
+                      <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">
+                        <a
+                          href={getImageUrl(report.evidence)}
+                          className="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300"
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          View Image
+                        </a>
+                      </td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>

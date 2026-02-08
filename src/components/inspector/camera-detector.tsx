@@ -4,17 +4,21 @@ import { Select } from '../catalyst-ui-kit/select'
 import { Inspector, type StatusMessage } from '../../services/inspector'
 import { Toast, useToast } from '../shared/toast'
 import { PersonsService, type Person } from '../../services/persons'
+import { ReportsService } from '../../services/reports'
 
 export function CameraDetector() {
   const [isStreaming, setIsStreaming] = useState(false)
   const [persons, setPersons] = useState<Person[]>([])
   const [selectedPersonId, setSelectedPersonId] = useState<string>('')
+  const [observations, setObservations] = useState<string>('')
   const [isLoadingPersons, setIsLoadingPersons] = useState(false)
+  const [isCreatingReport, setIsCreatingReport] = useState(false)
   const { toast, showToast, hideToast } = useToast()
 
   const containerRef = useRef<HTMLDivElement>(null)
   const inspectorRef = useRef<Inspector | null>(null)
   const personsService = useRef(new PersonsService())
+  const reportsService = useRef(new ReportsService())
 
   // Handle status messages
   const handleStatusChange = useCallback(
@@ -73,6 +77,56 @@ export function CameraDetector() {
 
   const handleStop = () => {
     inspectorRef.current?.stop()
+  }
+
+  const handleCreateReport = async () => {
+    // Validate person selection
+    if (!selectedPersonId) {
+      showToast('error', 'Please select a person')
+      return
+    }
+
+    // Validate that camera is streaming
+    if (!isStreaming) {
+      showToast('error', 'Camera must be active to create a report')
+      return
+    }
+
+    try {
+      setIsCreatingReport(true)
+
+      // Capture current frame as blob
+      const frameBlob = await inspectorRef.current?.captureFrameAsBlob()
+
+      if (!frameBlob) {
+        showToast('error', 'Failed to capture frame')
+        return
+      }
+
+      // Convert blob to file
+      const evidenceFile = new File([frameBlob], 'evidence.jpg', {
+        type: 'image/jpeg'
+      })
+
+      // Create report
+      await reportsService.current.create({
+        person_id: parseInt(selectedPersonId),
+        observations: observations || '',
+        evidence: evidenceFile
+      })
+
+      // Reset form fields
+      setSelectedPersonId('')
+      setObservations('')
+
+      showToast('success', 'Report created successfully')
+    } catch (error) {
+      console.error('Error creating report:', error)
+      const message = error instanceof Error ? error.message : 'Failed to create report'
+      showToast('error', message)
+    } finally {
+      setIsCreatingReport(false)
+    }
   }
 
   return (
@@ -164,18 +218,20 @@ export function CameraDetector() {
             placeholder="Write any notes or observations about the detected person here..."
             rows={4}
             className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-indigo-500"
-            defaultValue={''}
+            value={observations}
+            onChange={(e) => setObservations(e.target.value)}
           />
         </div>
 
         <div className="w-full">
           <Button
             color="violet"
-            // onClick={}
+            onClick={handleCreateReport}
+            disabled={isCreatingReport || !isStreaming || !selectedPersonId}
             className="w-full cursor-pointer select-none"
           >
             <span className="mr-1">📝</span>
-            Create Report
+            {isCreatingReport ? 'Creating...' : 'Create Report'}
           </Button>
         </div>
       </div>

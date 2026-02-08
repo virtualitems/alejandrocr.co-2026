@@ -246,7 +246,7 @@ export class Inspector {
       this.setupWebSocket()
     } catch (error) {
       console.error('Error starting inspector:', error)
-      
+
       // Provide user-friendly error messages
       if (error instanceof CameraPermissionError) {
         this.notifyStatus(`❌ ${error.message}`, 'error')
@@ -261,7 +261,7 @@ export class Inspector {
       } else {
         this.notifyStatus('❌ An unknown error occurred', 'error')
       }
-      
+
       this.stop()
       throw error
     }
@@ -302,5 +302,19 @@ export class Inspector {
 
   updateCallbacks(callbacks: Partial<InspectorCallbacks>): void {
     this.callbacks = { ...this.callbacks, ...callbacks }
+  }
+
+  // Capture current frame as blob
+  async captureFrameAsBlob(): Promise<Blob | null> {
+    return new Promise((resolve) => {
+      if (!this._isStreaming) {
+        resolve(null)
+        return
+      }
+
+      this.canvasElement.toBlob((blob) => {
+        resolve(blob)
+      }, 'image/jpeg', 0.9)
+    })
   }
 }
