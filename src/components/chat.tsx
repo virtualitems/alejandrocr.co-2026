@@ -149,7 +149,11 @@ export function Chat(props: Props) {
           onClick={handleSend}
           color="indigo"
           disabled={isLoading || inputValue.trim() === ''}
-          className="cursor-pointer select-none"
+          className={`select-none ${
+            isLoading || inputValue.trim() === ''
+              ? 'cursor-not-allowed'
+              : 'cursor-pointer'
+          }`}
         >
           Send
         </Button>
