@@ -1,7 +1,7 @@
-import { useState } from 'react'
 import { Layout } from '../layouts/2-columns'
 import { ReportsTable, type Person } from '../components/reports-table'
 import { Chat, type Message } from '../components/chat'
+import { useChatbot } from '../hooks/useChatbot'
 
 const user = {
 	name: 'Tom Cook',
@@ -61,91 +61,11 @@ const initialMessages: Message[] = [
 	}
 ]
 
-async function sendMessageToAPI(message: string, onChunk: (chunk: string) => void): Promise<void> {
-	try {
-		const formdata = new FormData()
-		formdata.append('q', message)
-
-		const response = await fetch('https://ia.allup.com.co/chatbot/text-to-text', {
-			method: 'POST',
-			body: formdata,
-		})
-
-		if (!response.ok) {
-			throw new Error(`HTTP error! status: ${response.status}`)
-		}
-
-		const reader = response.body?.getReader()
-		if (!reader) {
-			throw new Error('No reader available')
-		}
-
-		const decoder = new TextDecoder()
-
-		while (true) {
-			const { done, value } = await reader.read()
-			if (done) break
-
-			const chunk = decoder.decode(value, { stream: true })
-			onChunk(chunk)
-		}
-	} catch (error) {
-		console.error('Error sending message:', error)
-		throw error
-	}
-}
-
 export function ReportsPage({ navigation }: Props) {
-	const [messages, setMessages] = useState<Message[]>(initialMessages)
-	const [isLoading, setIsLoading] = useState(false)
-
-	const handleSendMessage = async (message: string) => {
-		// Add user message
-		const userMessage: Message = {
-			id: Date.now().toString(),
-			text: message,
-			sender: 'user',
-			timestamp: new Date()
-		}
-
-		setMessages((prev) => [...prev, userMessage])
-		setIsLoading(true)
-
-		// Create bot message placeholder
-		const botMessageId = (Date.now() + 1).toString()
-		const botMessage: Message = {
-			id: botMessageId,
-			text: '',
-			sender: 'bot',
-			timestamp: new Date()
-		}
-
-		setMessages((prev) => [...prev, botMessage])
-
-		try {
-			await sendMessageToAPI(message, (chunk) => {
-				setMessages((prev) => {
-					const updated = [...prev]
-					const lastMessage = updated[updated.length - 1]
-					if (lastMessage && lastMessage.id === botMessageId) {
-						lastMessage.text += chunk
-					}
-					return updated
-				})
-			})
-		} catch (error) {
-			setMessages((prev) => {
-				const updated = [...prev]
-				const lastMessage = updated[updated.length - 1]
-				if (lastMessage && lastMessage.id === botMessageId) {
-					lastMessage.text = 'Sorry, there was an error processing your message.'
-				}
-				return updated
-			})
-		} finally {
-			setIsLoading(false)
-		}
-	}
+	const { messages, isLoading, sendMessage } = useChatbot({
+		initialMessages,
+		apiUrl: 'https://ia.allup.com.co/chatbot/text-to-text'
+	})
 
 	return (
 		<Layout
@@ -158,7 +78,7 @@ export function ReportsPage({ navigation }: Props) {
 					user={user}
 					bot={bot}
 					messages={messages}
-					onSendMessage={handleSendMessage}
+					onSendMessage={sendMessage}
 					isLoading={isLoading}
 				/>
 			}
