@@ -32,7 +32,7 @@ export function Toast({ show, type, title, message, onClose, duration = 5000 }: 
   return (
     <div
       aria-live="assertive"
-      className="pointer-events-none fixed inset-0 z-50 flex items-end px-4 py-6 sm:items-start sm:p-6"
+      className="pointer-events-none fixed inset-0 z-50 flex items-end px-4 py-6 sm:items-end sm:justify-end sm:p-6"
     >
       <div className="flex w-full flex-col items-center space-y-4 sm:items-end">
         <Transition show={show}>
