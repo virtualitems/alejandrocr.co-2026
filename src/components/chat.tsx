@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
+import { PlusCircleIcon } from '@heroicons/react/24/outline'
 import { Avatar } from './catalyst-ui-kit/avatar'
 import { Button } from './catalyst-ui-kit/button'
 import { Input } from './catalyst-ui-kit/input'
@@ -24,6 +25,7 @@ type Props = {
   }
   messages: Message[]
   onSendMessage: (message: string) => void
+  onClear?: () => void
   height: ChatHeight
   isLoading?: boolean
 }
@@ -39,7 +41,7 @@ const heightClasses = {
 }
 
 export function Chat(props: Props) {
-  const { user, bot, messages, onSendMessage, height, isLoading = false } = props
+  const { user, bot, messages, onSendMessage, onClear, height, isLoading = false } = props
   const [inputValue, setInputValue] = useState('')
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
@@ -70,7 +72,7 @@ export function Chat(props: Props) {
       {/* Chat Header */}
       <div className="flex items-center gap-3 border-b border-gray-200 pb-4 dark:border-gray-700">
         <Avatar src={bot.imageUrl} className="size-10" />
-        <div>
+        <div className="flex-1">
           <h3 className="text-sm font-semibold text-gray-900 dark:text-white">
             {bot.name}
           </h3>
@@ -78,6 +80,15 @@ export function Chat(props: Props) {
             {isLoading ? 'Thinking...' : 'Online'}
           </p>
         </div>
+        {onClear && (
+          <button
+            onClick={onClear}
+            className="cursor-pointer select-none rounded-lg p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-200"
+            title="New chat"
+          >
+            <PlusCircleIcon className="size-5" />
+          </button>
+        )}
       </div>
 
       {/* Messages Container */}

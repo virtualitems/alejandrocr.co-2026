@@ -1,6 +1,6 @@
 import { Layout } from '../layouts/2-columns'
 import { ReportsTable, type Person } from '../components/reports-table'
-import { Chat, type Message } from '../components/chat'
+import { Chat } from '../components/chat'
 import { useChatbot } from '../hooks/useChatbot'
 
 const user = {
@@ -50,18 +50,8 @@ const bot = {
 	imageUrl: '/bot.png'
 }
 
-const initialMessages: Message[] = [
-	{
-		id: '1',
-		text: 'Hello! How can I help you today?',
-		sender: 'bot',
-		timestamp: new Date()
-	}
-]
-
 export function ReportsPage({ navigation }: Props) {
-	const { messages, isLoading, sendMessage } = useChatbot({
-		initialMessages,
+	const { messages, isLoading, sendMessage, clearMessages } = useChatbot({
 		apiUrl: 'https://ia.allup.com.co/chatbot/text-to-text'
 	})
 
@@ -77,6 +67,7 @@ export function ReportsPage({ navigation }: Props) {
 					bot={bot}
 					messages={messages}
 					onSendMessage={sendMessage}
+					onClear={clearMessages}
 					isLoading={isLoading}
 				/>
 			}

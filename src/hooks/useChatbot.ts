@@ -1,8 +1,7 @@
-import { useState } from 'react'
 import type { Message } from '../components/chat'
+import { useChatStore } from '../stores/chatStore'
 
 type UseChatbotOptions = {
-	initialMessages?: Message[]
 	apiUrl: string
 }
 
@@ -10,6 +9,7 @@ type UseChatbotReturn = {
 	messages: Message[]
 	isLoading: boolean
 	sendMessage: (message: string) => Promise<void>
+	clearMessages: () => void
 }
 
 async function streamChatResponse(
@@ -46,9 +46,8 @@ async function streamChatResponse(
 }
 
 export function useChatbot(options: UseChatbotOptions): UseChatbotReturn {
-	const { initialMessages = [], apiUrl } = options
-	const [messages, setMessages] = useState<Message[]>(initialMessages)
-	const [isLoading, setIsLoading] = useState(false)
+	const { apiUrl } = options
+	const { messages, isLoading, addMessage, updateMessage, setLoading, clearMessages } = useChatStore()
 
 	const sendMessage = async (message: string): Promise<void> => {
 		// Add user message
@@ -59,8 +58,8 @@ export function useChatbot(options: UseChatbotOptions): UseChatbotReturn {
 			timestamp: new Date()
 		}
 
-		setMessages((prev) => [...prev, userMessage])
-		setIsLoading(true)
+		addMessage(userMessage)
+		setLoading(true)
 
 		// Create bot message placeholder
 		const botMessageId = (Date.now() + 1).toString()
@@ -71,37 +70,26 @@ export function useChatbot(options: UseChatbotOptions): UseChatbotReturn {
 			timestamp: new Date()
 		}
 
-		setMessages((prev) => [...prev, botMessage])
+		addMessage(botMessage)
 
 		try {
+			let accumulatedText = ''
 			await streamChatResponse(apiUrl, message, (chunk) => {
-				setMessages((prev) => {
-					return prev.map((msg) => {
-						if (msg.id === botMessageId) {
-							return { ...msg, text: msg.text + chunk }
-						}
-						return msg
-					})
-				})
+				accumulatedText += chunk
+				updateMessage(botMessageId, accumulatedText)
 			})
 		} catch (error) {
 			console.error('Error sending message:', error)
-			setMessages((prev) => {
-				return prev.map((msg) => {
-					if (msg.id === botMessageId) {
-						return { ...msg, text: 'Sorry, there was an error processing your message.' }
-					}
-					return msg
-				})
-			})
+			updateMessage(botMessageId, 'Sorry, there was an error processing your message.')
 		} finally {
-			setIsLoading(false)
+			setLoading(false)
 		}
 	}
 
 	return {
 		messages,
 		isLoading,
-		sendMessage
+		sendMessage,
+		clearMessages
 	}
 }
