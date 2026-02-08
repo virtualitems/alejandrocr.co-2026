@@ -9,7 +9,11 @@ export function InspectorPage({ navigation }: Props) {
   return (
     <Layout
       columnTitle="Inspector"
-      columnNode={<CameraDetector />}
+      columnNode={
+        <div className="flex h-full w-full flex-col gap-6">
+          <CameraDetector />
+        </div>
+      }
       columnWidth="5xl"
       navigation={navigation}
     />
