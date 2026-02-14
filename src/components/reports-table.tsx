@@ -20,7 +20,9 @@ export function ReportsTable(props: Props) {
   const { reports = [], page: pageProp, pageSize: pageSizeProp, total: totalProp, onPageChange, onDelete, isLoading } = props
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [reportToDelete, setReportToDelete] = useState<number | null>(null)
-  
+  const [observationDialogOpen, setObservationDialogOpen] = useState(false)
+  const [selectedObservation, setSelectedObservation] = useState<string>('')
+
   const pageSize = pageSizeProp ?? (reports.length || 10)
   const total = totalProp ?? (reports.length || 0)
   const totalPages = Math.max(1, Math.ceil(total / pageSize))
@@ -57,6 +59,16 @@ export function ReportsTable(props: Props) {
   const handleCancelDelete = () => {
     setDeleteDialogOpen(false)
     setReportToDelete(null)
+  }
+
+  const handleShowObservation = (observation: string) => {
+    setSelectedObservation(observation)
+    setObservationDialogOpen(true)
+  }
+
+  const handleCloseObservation = () => {
+    setObservationDialogOpen(false)
+    setSelectedObservation('')
   }
 
   return (
@@ -119,7 +131,13 @@ export function ReportsTable(props: Props) {
                         {report.person.name}
                       </td>
                       <td className="px-3 py-4 text-sm text-gray-500 dark:text-gray-400 max-w-xs truncate">
-                        {report.observations || <span className="italic text-gray-400">No observations</span>}
+                        <button
+                          type="button"
+                          onClick={() => handleShowObservation(report.observations || '')}
+                          className="select-none cursor-pointer text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300 font-medium"
+                        >
+                          Show
+                        </button>
                       </td>
                       <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">
                         {formatDate(report.created_at)}
@@ -204,6 +222,45 @@ export function ReportsTable(props: Props) {
           </div>
         </div>
       </div>
+
+      {/* Observations Dialog */}
+      <Dialog open={observationDialogOpen} onClose={handleCloseObservation} className="relative z-10">
+        <DialogBackdrop
+          transition
+          className="fixed inset-0 bg-gray-500/75 transition-opacity data-closed:opacity-0 data-enter:duration-300 data-enter:ease-out data-leave:duration-200 data-leave:ease-in dark:bg-gray-900/50"
+        />
+
+        <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
+          <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+            <DialogPanel
+              transition
+              className="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all data-closed:translate-y-4 data-closed:opacity-0 data-enter:duration-300 data-enter:ease-out data-leave:duration-200 data-leave:ease-in sm:my-8 sm:w-full sm:max-w-lg sm:p-6 data-closed:sm:translate-y-0 data-closed:sm:scale-95 dark:bg-gray-800 dark:outline dark:-outline-offset-1 dark:outline-white/10"
+            >
+              <div>
+                <div className="mt-2">
+                  <DialogTitle as="h3" className="text-base font-semibold text-gray-900 dark:text-white">
+                    Observations
+                  </DialogTitle>
+                  <div className="mt-4">
+                    <p className="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap">
+                      {selectedObservation || <span className="italic text-gray-400">No observations</span>}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
+                <button
+                  type="button"
+                  onClick={handleCloseObservation}
+                  className="select-none cursor-pointer inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 sm:ml-3 sm:w-auto dark:bg-indigo-500 dark:shadow-none dark:hover:bg-indigo-400"
+                >
+                  Close
+                </button>
+              </div>
+            </DialogPanel>
+          </div>
+        </div>
+      </Dialog>
 
       {/* Delete Confirmation Dialog */}
       <Dialog open={deleteDialogOpen} onClose={handleCancelDelete} className="relative z-10">
