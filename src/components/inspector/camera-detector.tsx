@@ -1,24 +1,21 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { Button } from '../catalyst-ui-kit/button'
 import { Select } from '../catalyst-ui-kit/select'
-import { Inspector, type StatusMessage } from '../../services/inspector'
+import { type StatusMessage } from '../../services/inspector'
 import { Toast, useToast } from '../shared/toast'
 import { PersonsService, type Person } from '../../services/persons'
-import { ReportsService } from '../../services/reports'
+import { useCameraDevices } from '../../hooks/useCameraDevices'
+import { useInspector } from '../../hooks/useInspector'
+import { useReportCreation } from '../../hooks/useReportCreation'
 
 export function CameraDetector() {
-  const [isStreaming, setIsStreaming] = useState(false)
   const [persons, setPersons] = useState<Person[]>([])
   const [selectedPersonId, setSelectedPersonId] = useState<string>('')
   const [observations, setObservations] = useState<string>('')
   const [isLoadingPersons, setIsLoadingPersons] = useState(false)
-  const [isCreatingReport, setIsCreatingReport] = useState(false)
   const { toast, showToast, hideToast } = useToast()
 
-  const containerRef = useRef<HTMLDivElement>(null)
-  const inspectorRef = useRef<Inspector | null>(null)
   const personsService = useRef(new PersonsService())
-  const reportsService = useRef(new ReportsService())
 
   // Handle status messages
   const handleStatusChange = useCallback(
@@ -30,6 +27,26 @@ export function CameraDetector() {
     },
     [showToast]
   )
+
+  // Custom hooks
+  const {
+    cameraDevices,
+    currentCameraIndex,
+    currentCamera,
+    nextCamera,
+    previousCamera
+  } = useCameraDevices()
+
+  const {
+    isStreaming,
+    containerRef,
+    start: startCamera,
+    stop: stopCamera,
+    captureFrame,
+    updateCamera
+  } = useInspector({ onStatusChange: handleStatusChange })
+
+  const { isCreating: isCreatingReport, createReport } = useReportCreation()
 
   // Fetch persons on mount
   useEffect(() => {
@@ -49,34 +66,42 @@ export function CameraDetector() {
     fetchPersons()
   }, [showToast])
 
-  // Initialize inspector
-  useEffect(() => {
-    const inspector = new Inspector(
-      {}, // Use default config
-      {
-        onStatusChange: handleStatusChange,
-        onStreamingChange: setIsStreaming
-      }
-    )
-
-    inspectorRef.current = inspector
-
-    // Append canvas to container
-    if (containerRef.current) {
-      containerRef.current.appendChild(inspector.canvas)
+  const handlePreviousCamera = () => {
+    if (cameraDevices.length === 0) {
+      showToast('error', 'No camera devices available')
+      return
     }
 
-    return () => {
-      inspector.destroy()
+    previousCamera()
+
+    if (currentCamera) {
+      updateCamera(currentCamera.deviceId)
+      const cameraName = currentCamera.label || `Camera ${currentCameraIndex + 1}`
+      showToast('success', `Switched to ${cameraName}`)
     }
-  }, [handleStatusChange])
+  }
+
+  const handleNextCamera = () => {
+    if (cameraDevices.length === 0) {
+      showToast('error', 'No camera devices available')
+      return
+    }
+
+    nextCamera()
+
+    if (currentCamera) {
+      updateCamera(currentCamera.deviceId)
+      const cameraName = currentCamera.label || `Camera ${currentCameraIndex + 1}`
+      showToast('success', `Switched to ${cameraName}`)
+    }
+  }
 
   const handleStart = () => {
-    inspectorRef.current?.start()
+    startCamera()
   }
 
   const handleStop = () => {
-    inspectorRef.current?.stop()
+    stopCamera()
   }
 
   const handleCreateReport = async () => {
@@ -93,10 +118,8 @@ export function CameraDetector() {
     }
 
     try {
-      setIsCreatingReport(true)
-
       // Capture current frame as blob
-      const frameBlob = await inspectorRef.current?.captureFrameAsBlob()
+      const frameBlob = await captureFrame()
 
       if (!frameBlob) {
         showToast('error', 'Failed to capture frame')
@@ -109,7 +132,7 @@ export function CameraDetector() {
       })
 
       // Create report
-      await reportsService.current.create({
+      await createReport({
         person_id: parseInt(selectedPersonId),
         observations: observations || '',
         evidence: evidenceFile
@@ -124,8 +147,6 @@ export function CameraDetector() {
       console.error('Error creating report:', error)
       const message = error instanceof Error ? error.message : 'Failed to create report'
       showToast('error', message)
-    } finally {
-      setIsCreatingReport(false)
     }
   }
 
@@ -155,7 +176,7 @@ export function CameraDetector() {
         <div className="w-full">
           {!isStreaming ? (
             <Button
-              color="indigo"
+              color="sky"
               onClick={handleStart}
               className="w-full cursor-pointer select-none"
             >
@@ -172,6 +193,26 @@ export function CameraDetector() {
               Stop
             </Button>
           )}
+        </div>
+
+        {/* Camera Navigation */}
+        <div className="w-full grid grid-cols-2 gap-3">
+          <Button
+            color="indigo"
+            onClick={handlePreviousCamera}
+            className="w-full cursor-pointer select-none"
+          >
+            <span className="mr-1">⬅️</span>
+            Previous Camera
+          </Button>
+          <Button
+            color="indigo"
+            onClick={handleNextCamera}
+            className="w-full cursor-pointer select-none"
+          >
+            <span className="mr-1">➡️</span>
+            Next Camera
+          </Button>
         </div>
 
         {/* Person Selector */}
