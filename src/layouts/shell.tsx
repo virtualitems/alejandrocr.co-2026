@@ -192,24 +192,27 @@ export function AppShell(props: Props) {
               <div className="mt-3 space-y-1 px-2">
                 <DisclosureButton
                   as="a"
-                  href="https://example.com"
+                  target="_blank"
+                  href="https://alejandrocr.co"
                   className="block rounded-md px-3 py-2 text-base font-medium text-white hover:bg-indigo-500/75 dark:hover:bg-indigo-700/75"
                 >
-                  Your profile
+                  Website
                 </DisclosureButton>
                 <DisclosureButton
                   as="a"
-                  href="https://example.com"
+                  target="_blank"
+                  href="https://github.com/virtualitems"
                   className="block rounded-md px-3 py-2 text-base font-medium text-white hover:bg-indigo-500/75 dark:hover:bg-indigo-700/75"
                 >
-                  Settings
+                  Github
                 </DisclosureButton>
                 <DisclosureButton
                   as="a"
-                  href="https://example.com"
+                  target="_blank"
+                  href="https://www.linkedin.com/in/alejandro-carrasco-web-ai-engineer"
                   className="block rounded-md px-3 py-2 text-base font-medium text-white hover:bg-indigo-500/75 dark:hover:bg-indigo-700/75"
                 >
-                  Sign out
+                  LinkedIn
                 </DisclosureButton>
               </div>
             </div>
@@ -232,7 +235,7 @@ export function AppShell(props: Props) {
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:max-w-7xl lg:px-8">
           <div className="border-t border-gray-200 py-8 text-center text-sm text-gray-500 sm:text-left dark:border-gray-700 dark:text-gray-400">
             <span className="block sm:inline">
-              &copy; 2021 Your Company, Inc.
+              &copy; 2026 Virtual Items.
             </span>{' '}
             <span className="block sm:inline">All rights reserved.</span>
           </div>
