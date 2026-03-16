@@ -9,7 +9,7 @@ import {
   MenuItem,
   MenuItems
 } from '@headlessui/react'
-import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import { clsx } from 'clsx'
 
 type NavItem = {
@@ -86,17 +86,8 @@ export function AppShell(props: Props) {
               </div>
               <div className="hidden lg:ml-4 lg:block">
                 <div className="flex items-center">
-                  <button
-                    type="button"
-                    className="relative shrink-0 rounded-full p-1 text-indigo-200 hover:text-white focus:outline-2 focus:outline-offset-2 focus:outline-white"
-                  >
-                    <span className="absolute -inset-1.5" />
-                    <span className="sr-only">View notifications</span>
-                    <BellIcon aria-hidden="true" className="size-6" />
-                  </button>
-
-                  <Menu as="div" className="relative ml-3 shrink-0">
-                    <MenuButton className="relative flex rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">
+                  <Menu as="div" className="relative shrink-0">
+                    <MenuButton className="relative flex rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white cursor-pointer">
                       <span className="absolute -inset-1.5" />
                       <span className="sr-only">Open user menu</span>
                       <img
@@ -180,14 +171,6 @@ export function AppShell(props: Props) {
                     {user.email}
                   </div>
                 </div>
-                <button
-                  type="button"
-                  className="relative ml-auto shrink-0 rounded-full p-1 text-indigo-200 hover:text-white focus:outline-2 focus:outline-offset-2 focus:outline-white"
-                >
-                  <span className="absolute -inset-1.5" />
-                  <span className="sr-only">View notifications</span>
-                  <BellIcon aria-hidden="true" className="size-6" />
-                </button>
               </div>
               <div className="mt-3 space-y-1 px-2">
                 <DisclosureButton
