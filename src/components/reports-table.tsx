@@ -3,8 +3,6 @@ import { ChevronLeftIcon, ChevronRightIcon, TrashIcon } from '@heroicons/react/2
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react'
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 import type { Report } from '../services/reports'
-import 'lightbox2/dist/css/lightbox.min.css'
-import 'lightbox2'
 
 type Props = {
   reports: Report[]
@@ -22,6 +20,10 @@ export function ReportsTable(props: Props) {
   const [reportToDelete, setReportToDelete] = useState<number | null>(null)
   const [observationDialogOpen, setObservationDialogOpen] = useState(false)
   const [selectedObservation, setSelectedObservation] = useState<string>('')
+  const [imageDialogOpen, setImageDialogOpen] = useState(false)
+  const [selectedImageUrl, setSelectedImageUrl] = useState<string>('')
+  const [imageLoading, setImageLoading] = useState(false)
+  const [selectedImageTitle, setSelectedImageTitle] = useState<string>('')
 
   const pageSize = pageSizeProp ?? (reports.length || 10)
   const total = totalProp ?? (reports.length || 0)
@@ -69,6 +71,43 @@ export function ReportsTable(props: Props) {
   const handleCloseObservation = () => {
     setObservationDialogOpen(false)
     setSelectedObservation('')
+  }
+
+  const handleShowImage = async (evidenceUrl: string, title: string) => {
+    setImageDialogOpen(true)
+    setImageLoading(true)
+    setSelectedImageTitle(title)
+    setSelectedImageUrl('')
+
+    try {
+      const response = await fetch(evidenceUrl, {
+        headers: {
+          'X-Access-Media': '1'
+        }
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch evidence image')
+      }
+
+      const blob = await response.blob()
+      const blobUrl = URL.createObjectURL(blob)
+      setSelectedImageUrl(blobUrl)
+    } catch (error) {
+      console.error('Error fetching evidence image:', error)
+    } finally {
+      setImageLoading(false)
+    }
+  }
+
+  const handleCloseImage = () => {
+    if (selectedImageUrl) {
+      URL.revokeObjectURL(selectedImageUrl)
+    }
+    setImageDialogOpen(false)
+    setSelectedImageUrl('')
+    setSelectedImageTitle('')
+    setImageLoading(false)
   }
 
   return (
@@ -143,14 +182,13 @@ export function ReportsTable(props: Props) {
                         {formatDate(report.created_at)}
                       </td>
                       <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">
-                        <a
-                          href={report.evidence}
-                          data-lightbox={`report-${report.id}`}
-                          data-title={`${report.person.name} - ${formatDate(report.created_at)}`}
+                        <button
+                          type="button"
+                          onClick={() => handleShowImage(report.evidence, `${report.person.name} - ${formatDate(report.created_at)}`)}
                           className="select-none cursor-pointer text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300"
                         >
                           View Image
-                        </a>
+                        </button>
                       </td>
                       <td className="py-4 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-6">
                         <button
@@ -304,6 +342,58 @@ export function ReportsTable(props: Props) {
                   className="select-none cursor-pointer mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs inset-ring-1 inset-ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto dark:bg-white/10 dark:text-white dark:shadow-none dark:inset-ring-white/5 dark:hover:bg-white/20"
                 >
                   Cancel
+                </button>
+              </div>
+            </DialogPanel>
+          </div>
+        </div>
+      </Dialog>
+
+      {/* Image Modal */}
+      <Dialog open={imageDialogOpen} onClose={handleCloseImage} className="relative z-50">
+        <DialogBackdrop
+          transition
+          className="fixed inset-0 bg-gray-500/75 transition-opacity data-closed:opacity-0 data-enter:duration-300 data-leave:duration-200 data-enter:ease-out data-leave:ease-in dark:bg-gray-900/80"
+        />
+
+        <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
+          <div className="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
+            <DialogPanel
+              transition
+              className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-2xl transition-all data-closed:translate-y-4 data-closed:opacity-0 data-enter:duration-300 data-leave:duration-200 data-enter:ease-out data-leave:ease-in sm:my-8 sm:w-full sm:max-w-3xl data-closed:sm:translate-y-0 data-closed:sm:scale-95 dark:bg-gray-900"
+            >
+              <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4 dark:bg-gray-900">
+                <div className="sm:flex sm:items-start">
+                  <div className="mt-3 w-full text-center sm:mt-0 sm:text-left">
+                    <DialogTitle as="h3" className="text-base font-semibold text-gray-900 mb-4 dark:text-white">
+                      {selectedImageTitle}
+                    </DialogTitle>
+                    <div className="mt-2 flex items-center justify-center min-h-[400px]">
+                      {imageLoading ? (
+                        <div className="flex flex-col items-center gap-3">
+                          <div className="h-12 w-12 animate-spin rounded-full border-4 border-gray-200 border-t-indigo-600 dark:border-gray-700 dark:border-t-indigo-400"></div>
+                          <p className="text-sm text-gray-500 dark:text-gray-400">Loading image...</p>
+                        </div>
+                      ) : selectedImageUrl ? (
+                        <img
+                          src={selectedImageUrl}
+                          alt="Evidence"
+                          className="max-w-full max-h-[600px] object-contain rounded-lg"
+                        />
+                      ) : (
+                        <p className="text-sm text-red-500 dark:text-red-400">Failed to load image</p>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6 dark:bg-gray-800/50">
+                <button
+                  type="button"
+                  onClick={handleCloseImage}
+                  className="select-none cursor-pointer inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs inset-ring-1 inset-ring-gray-300 hover:bg-gray-50 sm:w-auto dark:bg-white/10 dark:text-white dark:shadow-none dark:inset-ring-white/5 dark:hover:bg-white/20"
+                >
+                  Close
                 </button>
               </div>
             </DialogPanel>
