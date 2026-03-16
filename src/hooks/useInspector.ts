@@ -56,16 +56,41 @@ export function useInspector(options: UseInspectorOptions = {}): UseInspectorRet
     return (await inspectorRef.current?.captureFrameAsBlob()) || null
   }, [])
 
-  const updateCamera = useCallback((deviceId: string) => {
-    inspectorRef.current?.updateConfig({
-      videoConstraints: {
-        deviceId: { exact: deviceId },
-        facingMode: 'environment',
-        width: { ideal: 640 },
-        height: { ideal: 480 }
+  const updateCamera = useCallback(async (deviceId: string) => {
+    const inspector = inspectorRef.current
+    if (!inspector) return
+
+    // Stop the current stream
+    inspector.stop()
+
+    // Create a new inspector with the updated camera
+    const newInspector = new Inspector(
+      {
+        videoConstraints: {
+          deviceId: { exact: deviceId },
+          facingMode: 'environment',
+          width: { ideal: 640 },
+          height: { ideal: 480 }
+        }
+      },
+      {
+        onStatusChange,
+        onStreamingChange: setIsStreaming
       }
-    })
-  }, [])
+    )
+
+    // Replace the old inspector
+    inspectorRef.current = newInspector
+
+    // Replace the canvas in the container
+    if (containerRef.current) {
+      containerRef.current.innerHTML = ''
+      containerRef.current.appendChild(newInspector.canvas)
+    }
+
+    // Start the new inspector
+    await newInspector.start()
+  }, [onStatusChange])
 
   return {
     inspector: inspectorRef.current,
