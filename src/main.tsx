@@ -6,11 +6,11 @@ import { Router } from './Router'
 import './tailwind.css'
 
 const navigation = [
-  { name: 'About', href: '#' },
+  { name: 'About', href: '/about' },
   { name: 'Persons', href: '/persons' },
   { name: 'Inspector', href: '/inspector' },
   { name: 'Reports', href: '/reports' },
-  { name: 'Contact', href: '#' }
+  { name: 'Contact', href: '/contact' }
 ]
 
 const rootElement = document.getElementById('root')
