@@ -16,7 +16,7 @@ export function Router({ navigation }: Props) {
 
   return (
     <Routes>
-      <Route path="/" element={<Navigate to="/persons" replace />} />
+      <Route path="/" element={<Navigate to="/about" replace />} />
       <Route path="/about" element={<AboutPage navigation={currentNavigation} />} />
       <Route path="/persons" element={<PersonsPage navigation={currentNavigation} />} />
       <Route path="/inspector" element={<InspectorPage navigation={currentNavigation} />} />
