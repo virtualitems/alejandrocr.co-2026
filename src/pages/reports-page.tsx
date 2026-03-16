@@ -21,7 +21,7 @@ const bot = {
 export function ReportsPage({ navigation }: Props) {
 	const { reports, isLoading, deleteReport } = useReports()
 	const { messages, isLoading: isChatLoading, sendMessage, clearMessages } = useChatbot({
-		baseUrl: 'https://ia.allup.com.co'
+		baseUrl: 'https://demo.alejandrocr.co/api'
 	})
 
 	const handleDelete = (reportId: number) => {

@@ -1,5 +1,3 @@
-const API_BASE_URL = 'https://ia.allup.com.co'
-
 export type Person = {
   id?: number
   name: string
@@ -20,17 +18,11 @@ export type PersonUpdate = {
 }
 
 export class PersonsService {
-  private baseUrl: string
-
-  constructor(baseUrl: string = API_BASE_URL) {
-    this.baseUrl = baseUrl
-  }
-
   /**
    * Obtiene todas las personas
    */
   async getAll(): Promise<Person[]> {
-    const response = await fetch(`${this.baseUrl}/persons`, {
+    const response = await fetch('https://demo.alejandrocr.co/api/persons', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -49,7 +41,7 @@ export class PersonsService {
    * Obtiene una persona por ID
    */
   async getById(id: number): Promise<Person> {
-    const response = await fetch(`${this.baseUrl}/persons/${id}`, {
+    const response = await fetch(`https://demo.alejandrocr.co/api/persons/${id}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -71,7 +63,7 @@ export class PersonsService {
    * Crea una nueva persona
    */
   async create(person: PersonCreate): Promise<void> {
-    const response = await fetch(`${this.baseUrl}/persons`, {
+    const response = await fetch('https://demo.alejandrocr.co/api/persons', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -92,7 +84,7 @@ export class PersonsService {
    * Actualiza una persona existente
    */
   async update(id: number, person: PersonUpdate): Promise<void> {
-    const response = await fetch(`${this.baseUrl}/persons/${id}`, {
+    const response = await fetch(`https://demo.alejandrocr.co/api/persons/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -116,7 +108,7 @@ export class PersonsService {
    * Elimina una persona (soft delete)
    */
   async delete(id: number): Promise<void> {
-    const response = await fetch(`${this.baseUrl}/persons/${id}`, {
+    const response = await fetch(`https://demo.alejandrocr.co/api/persons/${id}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',

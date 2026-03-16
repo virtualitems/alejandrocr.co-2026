@@ -25,8 +25,6 @@ export type StatusMessage = {
 }
 
 export type InspectorConfig = {
-  wsHost?: string
-  wsEndpoint?: string
   frameRate?: number
   videoConstraints?: MediaTrackConstraints
 }
@@ -61,8 +59,6 @@ export class Inspector {
   ) {
     // Set default configuration
     this.config = {
-      wsHost: config.wsHost ?? 'ia.allup.com.co',
-      wsEndpoint: config.wsEndpoint ?? '/vision/stream-safety',
       frameRate: config.frameRate ?? 10,
       videoConstraints: config.videoConstraints ?? {
         facingMode: 'environment',
@@ -152,10 +148,7 @@ export class Inspector {
   }
 
   private setupWebSocket(): void {
-    const isLocalhost = ['localhost', '127.0.0.1'].includes(window.location.hostname)
-    const wsHost = isLocalhost ? this.config.wsHost : window.location.host
-    const wsProtocol = isLocalhost || window.location.protocol === 'https:' ? 'wss:' : 'ws:'
-    const wsUrl = `${wsProtocol}//${wsHost}${this.config.wsEndpoint}`
+    const wsUrl = 'wss://demo.alejandrocr.co/ws/vision/stream-safety'
 
     try {
       const ws = new WebSocket(wsUrl)
@@ -296,10 +289,6 @@ export class Inspector {
   }
 
   // Configuration methods
-  updateConfig(config: Partial<InspectorConfig>): void {
-    this.config = { ...this.config, ...config }
-  }
-
   updateCallbacks(callbacks: Partial<InspectorCallbacks>): void {
     this.callbacks = { ...this.callbacks, ...callbacks }
   }

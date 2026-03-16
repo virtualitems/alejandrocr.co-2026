@@ -19,22 +19,13 @@ type ListReportResponse = {
 }
 
 export class ReportsService {
-  private baseUrl: string
-
-  constructor() {
-    const isLocalhost = ['localhost', '127.0.0.1'].includes(window.location.hostname)
-    this.baseUrl = isLocalhost
-      ? 'https://ia.allup.com.co/reports'
-      : `${window.location.origin}/reports`
-  }
-
   async create(data: CreateReportData): Promise<void> {
     const formData = new FormData()
     formData.append('person_id', data.person_id.toString())
     formData.append('observations', data.observations)
     formData.append('evidence', data.evidence, 'evidence.jpg')
 
-    const response = await fetch(this.baseUrl, {
+    const response = await fetch('https://demo.alejandrocr.co/api/reports', {
       method: 'POST',
       body: formData
     })
@@ -45,12 +36,19 @@ export class ReportsService {
     }
   }
 
-  async getAll(personId?: number): Promise<Report[]> {
-    const url = personId
-      ? `${this.baseUrl}?person_id=${personId}`
-      : this.baseUrl
+  async getAll(): Promise<Report[]> {
+    const response = await fetch('https://demo.alejandrocr.co/api/reports')
 
-    const response = await fetch(url)
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`)
+    }
+
+    const result: ListReportResponse = await response.json()
+    return result.data
+  }
+
+  async getByPersonId(personId: number): Promise<Report[]> {
+    const response = await fetch(`https://demo.alejandrocr.co/api/reports?person_id=${personId}`)
 
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`)
@@ -61,7 +59,7 @@ export class ReportsService {
   }
 
   async delete(reportId: number): Promise<void> {
-    const response = await fetch(`${this.baseUrl}/${reportId}`, {
+    const response = await fetch(`https://demo.alejandrocr.co/api/reports/${reportId}`, {
       method: 'DELETE'
     })
 
