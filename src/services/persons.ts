@@ -85,7 +85,7 @@ export class PersonsService {
    */
   async update(id: number, person: PersonUpdate): Promise<void> {
     const response = await fetch(`https://demo.alejandrocr.co/api/persons/${id}`, {
-      method: 'PUT',
+      method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
       },
