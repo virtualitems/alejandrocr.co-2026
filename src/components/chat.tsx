@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
-import { PlusCircleIcon } from '@heroicons/react/24/outline'
+import { PlusCircleIcon, DocumentTextIcon } from '@heroicons/react/24/outline'
 import { Avatar } from './catalyst-ui-kit/avatar'
 import { Button } from './catalyst-ui-kit/button'
 import { Input } from './catalyst-ui-kit/input'
@@ -28,6 +28,7 @@ type Props = {
   onClear?: () => void
   height: ChatHeight
   isLoading?: boolean
+  documentUrl?: string
 }
 
 const heightClasses = {
@@ -48,7 +49,8 @@ export function Chat(props: Props) {
     onSendMessage,
     onClear,
     height,
-    isLoading = false
+    isLoading = false,
+    documentUrl
   } = props
   const [inputValue, setInputValue] = useState('')
   const messagesEndRef = useRef<HTMLDivElement>(null)
@@ -88,6 +90,15 @@ export function Chat(props: Props) {
             {isLoading ? 'Thinking...' : 'Online'}
           </p>
         </div>
+        {documentUrl && (
+          <button
+            onClick={() => window.open(documentUrl, '_blank')}
+            className="cursor-pointer select-none rounded-lg p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-200"
+            title="Open PPE Safety Manual Document"
+          >
+            <DocumentTextIcon className="size-5" />
+          </button>
+        )}
         {onClear && (
           <button
             onClick={onClear}

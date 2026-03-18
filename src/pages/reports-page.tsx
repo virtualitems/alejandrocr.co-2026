@@ -42,6 +42,7 @@ export function ReportsPage({ navigation }: Props) {
 					onSendMessage={sendMessage}
 					onClear={clearMessages}
 					isLoading={isChatLoading}
+					documentUrl="/docs/AI_PPE_Safety_Manual_Demo.pdf"
 				/>
 			}
 			navigation={navigation}
